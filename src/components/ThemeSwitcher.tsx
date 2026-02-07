@@ -1,7 +1,6 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Trans } from "@lingui/macro";
 
 export function ThemeSwitcher() {
   const [isDark, setIsDark] = useState(false);
@@ -15,6 +14,9 @@ export function ThemeSwitcher() {
     if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       setIsDark(true);
       document.documentElement.classList.add("dark");
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
@@ -31,39 +33,46 @@ export function ThemeSwitcher() {
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="p-3 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-sm hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-300 group relative overflow-hidden"
-      title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-    >
-      <div className="relative z-10">
-        <AnimatePresence mode="wait">
-          {isDark ? (
-            <motion.div
-              key="moon"
-              initial={{ y: 20, opacity: 0, rotate: 45 }}
-              animate={{ y: 0, opacity: 1, rotate: 0 }}
-              exit={{ y: -20, opacity: 0, rotate: -45 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Moon className="w-5 h-5 text-indigo-400 group-hover:text-indigo-300" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="sun"
-              initial={{ y: 20, opacity: 0, rotate: 45 }}
-              animate={{ y: 0, opacity: 1, rotate: 0 }}
-              exit={{ y: -20, opacity: 0, rotate: -45 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Sun className="w-5 h-5 text-amber-500 group-hover:text-amber-400" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+    <div className="fixed left-6 top-1/2 -translate-y-1/2 z-100 hidden md:block">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex flex-col items-center gap-4 p-2 rounded-full glass-card border-indigo-500/10 shadow-2xl backdrop-blur-2xl"
+      >
+        <button
+          onClick={() => !isDark && toggleTheme()}
+          className={`p-2.5 rounded-full transition-all duration-500 ${
+            isDark
+              ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/40 scale-110"
+              : "text-slate-400 hover:text-indigo-500 hover:bg-indigo-50"
+          }`}
+          title="Dark Mode"
+        >
+          <Moon size={18} strokeWidth={2.5} />
+        </button>
 
-      {/* Background decoration */}
-      <motion.div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-900/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-    </button>
+        <div className="w-8 h-px bg-slate-200 dark:bg-indigo-500/20" />
+
+        <button
+          onClick={() => isDark && toggleTheme()}
+          className={`p-2.5 rounded-full transition-all duration-500 ${
+            !isDark
+              ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/40 scale-110"
+              : "text-slate-400 hover:text-indigo-500 hover:bg-slate-800"
+          }`}
+          title="Light Mode"
+        >
+          <Sun size={18} strokeWidth={2.5} />
+        </button>
+      </motion.div>
+
+      {/* Decorative vertical line */}
+      <motion.div
+        initial={{ height: 0 }}
+        animate={{ height: "40px" }}
+        transition={{ delay: 0.5 }}
+        className="w-px bg-linear-to-b from-transparent via-indigo-500/30 to-transparent mx-auto mt-4"
+      />
+    </div>
   );
 }

@@ -1,80 +1,113 @@
 import { useLingui } from "@lingui/react";
-import { i18n, dynamicActivate } from "../i18n";
+import { dynamicActivate } from "../i18n";
 import { motion, AnimatePresence } from "framer-motion";
-import { Languages, Check, ChevronDown } from "lucide-react";
+import { Globe, X } from "lucide-react";
 import { useState } from "react";
 
 const languages = [
-  { code: "fr", label: "Français", flag: "🇫🇷" },
-  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "fr", label: "FR" },
+  { code: "en", label: "EN" },
 ];
 
 export function LanguageSwitcher() {
   const { i18n: lingui } = useLingui();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleLanguage = async (locale: string) => {
-    await dynamicActivate(locale);
-    setIsOpen(false);
+    if (lingui.locale !== locale) {
+      await dynamicActivate(locale);
+    }
+    setIsExpanded(false);
   };
 
-  const currentLanguage =
-    languages.find((l) => l.code === lingui.locale) || languages[0];
-
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm hover:border-indigo-300 transition-all duration-300 group"
+    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-150 ">
+      <motion.div
+        animate={{
+          height: isExpanded ? "108px" : "36px",
+        }}
+        transition={{
+          type: "spring",
+          damping: 30,
+          stiffness: 400,
+          mass: 0.8,
+        }}
+        className="glass-card border-indigo-500/10 shadow-2xl backdrop-blur-3xl overflow-hidden flex flex-col items-center rounded-full w-9"
       >
-        <Languages className="w-4 h-4 text-slate-500 group-hover:text-indigo-600 transition-colors" />
-        <span className="text-sm font-semibold text-slate-700">
-          {currentLanguage.label}
-        </span>
-        <ChevronDown
-          className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
+        {/* Toggle Button - Top Fixed Part */}
+        <div className="h-9 w-9 flex items-center justify-center shrink-0">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`p-1.5 rounded-full transition-colors duration-300 ${
+              isExpanded
+                ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                : "text-indigo-400 hover:bg-indigo-500/10"
+            }`}
+          >
+            <AnimatePresence mode="wait">
+              {isExpanded ? (
+                <motion.div
+                  key="close"
+                  initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <X size={14} strokeWidth={3} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="globe"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Globe size={14} strokeWidth={2.5} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-10"
-              onClick={() => setIsOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl shadow-indigo-100/50 border border-slate-100 overflow-hidden z-20"
+        {/* Vertical Options - Bottom Part with perfect spacing */}
+        <div className="flex flex-col items-center gap-2 pb-2">
+          {languages.map((lang, index) => (
+            <motion.button
+              key={lang.code}
+              initial={false}
+              animate={{
+                opacity: isExpanded ? 1 : 0,
+                scale: isExpanded ? 1 : 0.6,
+                y: isExpanded ? 0 : -10,
+                pointerEvents: isExpanded ? "auto" : "none",
+              }}
+              transition={{
+                delay: isExpanded ? 0.05 + index * 0.05 : 0,
+                duration: 0.2,
+              }}
+              onClick={() => toggleLanguage(lang.code)}
+              className={`w-7 h-7 flex items-center justify-center rounded-full text-[9px] font-black transition-all duration-300 ${
+                lingui.locale === lang.code
+                  ? "bg-white text-indigo-500 shadow-md shadow-indigo-500/20"
+                  : "text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/5 group"
+              }`}
             >
-              <div className="p-2">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => toggleLanguage(lang.code)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
-                      lingui.locale === lang.code
-                        ? "bg-indigo-50 text-indigo-700"
-                        : "hover:bg-slate-50 text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{lang.flag}</span>
-                      <span className="text-sm font-medium">{lang.label}</span>
-                    </div>
-                    {lingui.locale === lang.code && (
-                      <Check className="w-4 h-4 text-indigo-600" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              {lang.label}
+            </motion.button>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Extreme Minimalist Indicator */}
+      {!isExpanded && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="w-px h-6 bg-linear-to-b from-transparent via-indigo-500/20 to-transparent mx-auto mt-3"
+        />
+      )}
     </div>
   );
 }

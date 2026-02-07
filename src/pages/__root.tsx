@@ -11,6 +11,9 @@ import { useEffect } from "react";
 import AOS from "aos";
 import aosCss from "aos/dist/aos.css?url";
 import appCss from "../styles.css?url";
+import { Navbar } from "../components/Navbar";
+import { CustomCursor } from "../components/CustomCursor";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -79,7 +82,12 @@ function RootComponent() {
       </head>
       <body>
         <I18nProvider i18n={i18n}>
-          <Outlet />
+          <CustomCursor />
+          <LanguageSwitcher />
+          <Navbar />
+          <main className=" min-h-screen relative overflow-hidden bg-slate-50 dark:bg-[#070b14] selection:bg-indigo-100 dark:selection:bg-indigo-500/30 selection:text-indigo-900 dark:selection:text-indigo-100 font-sans transition-colors duration-700">
+            <Outlet />
+          </main>
         </I18nProvider>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />

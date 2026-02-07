@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+  --color-midnight: #0a0f1d;
+  --color-midnight-light: #161e31;
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-500;
+    @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-500 md:cursor-none;
     font-family:
       "Inter",
       system-ui,
@@ -14,25 +19,26 @@
     color-scheme: dark;
   }
 
+  /* Version Dark par défaut tendant vers le bleu nuit / indigo */
   .dark body {
-    @apply bg-slate-950 text-slate-100;
+    @apply bg-[#070b14] text-slate-100;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg border border-white/20 dark:border-slate-800 shadow-xl;
+    @apply bg-white/70 dark:bg-indigo-950/40 backdrop-blur-lg border border-white/20 dark:border-indigo-500/20 shadow-xl;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white font-semibold rounded-xl 
-           shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 dark:hover:bg-indigo-400 
+    @apply px-6 py-3 bg-indigo-600 dark:bg-indigo-600 text-white font-semibold rounded-xl 
+           shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40 hover:bg-indigo-700 dark:hover:bg-indigo-500 
            hover:-translate-y-0.5 transition-all duration-300 active:scale-95;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold rounded-xl 
-           border border-slate-200 dark:border-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 
+    @apply px-6 py-3 bg-white dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-300 font-semibold rounded-xl 
+           border border-slate-200 dark:border-indigo-500/30 shadow-sm hover:bg-slate-50 dark:hover:bg-indigo-900/40 
            hover:-translate-y-0.5 transition-all duration-300 active:scale-95;
   }
 }
@@ -52,5 +58,9 @@
 
   .animate-gradient {
     animation: gradient 6s linear infinite;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
   }
 }

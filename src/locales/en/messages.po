@@ -6,31 +6,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
-#: src/routes/index.tsx:65
+#: src/components/Navbar.tsx:25
+msgid "À propos"
+msgstr "About"
+
+#: src/components/Navbar.tsx:22
+msgid "Accueil"
+msgstr "Home"
+
+#: src/pages/index.tsx:69
 msgid "Bienvenue dans mon"
 msgstr "Welcome to my"
 
-#: src/routes/index.tsx:59
+#: src/components/Navbar.tsx:26
+msgid "Contact"
+msgstr "Contact"
+
+#: src/pages/index.tsx:63
 msgid "Disponible pour de nouveaux projets"
 msgstr "Available for new projects"
 
-#: src/routes/index.tsx:73
+#: src/components/Navbar.tsx:23
+msgid "Expertise"
+msgstr "Expertise"
+
+#: src/pages/index.tsx:77
 msgid "Je conçois des expériences numériques exceptionnelles alliant performance technique et esthétique raffinée. Spécialisé en React, TanStack et animations premium."
 msgstr "I design exceptional digital experiences combining technical performance and refined aesthetics. Specialized in React, TanStack and premium animations."
 
-#: src/routes/index.tsx:88
+#: src/pages/index.tsx:92
 msgid "Me contacter"
 msgstr "Contact Me"
 
-#: src/routes/index.tsx:106
+#: src/components/Navbar.tsx:24
+msgid "Projets"
+msgstr "Projects"
+
+#: src/pages/index.tsx:110
 msgid "projets réussis avec succès"
 msgstr "successfully completed projects"
 
-#: src/routes/index.tsx:68
+#: src/pages/index.tsx:72
 msgid "Univers Créatif"
 msgstr "Creative Universe"
 
-#: src/routes/index.tsx:83
+#: src/pages/index.tsx:87
 msgid "Voir mes projets"
 msgstr "View my projects"
